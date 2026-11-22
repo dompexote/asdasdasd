@@ -1,0 +1,479 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+<head>
+<meta charset="utf-8">
+<meta name="viewport" content="width=device-width, initial-scale=1, viewport-fit=cover">
+<title>Lucidrift · press start to remember</title>
+<link rel="preconnect" href="https://fonts.googleapis.com">
+<link rel="preconnect" href="https://fonts.gstatic.com" crossorigin>
+<link href="https://fonts.googleapis.com/css2?family=Press+Start+2P&family=VT323&display=swap" rel="stylesheet">
+<style>
+:root{
+  --bg:#0a0618;
+  --card:#171034;
+  --card2:#1e1548;
+  --ink:#f0eaff;
+  --mute:#9a90c9;
+  --a:#7cf5e1;    /* cyan neon  */
+  --b:#ff7ad9;    /* pink neon  */
+  --c:#9b8cff;    /* purple     */
+  --g:#b9ff7c;    /* green      */
+  --line:#2f2370;
+  --pixel:'Press Start 2P', monospace;
+  --mono:'VT323', monospace;
+  color-scheme:dark;
+  box-sizing:border-box;
+  padding-top:env(safe-area-inset-top,0px);
+  padding-bottom:env(safe-area-inset-bottom,0px);
+}
+html{scroll-padding-top:env(safe-area-inset-top,0px)}
+*{box-sizing:border-box}
+body{
+  margin:0;
+  background:
+    radial-gradient(1200px 600px at 85% -10%, #b967ff22, transparent),
+    radial-gradient(900px 500px at 0% 40%, #01cdfe14, transparent),
+    radial-gradient(700px 400px at 100% 80%, #ff71ce12, transparent),
+    var(--bg);
+  color:var(--ink);
+  font:16px/1.55 'Trebuchet MS','Segoe UI',system-ui,sans-serif;
+  min-height:100vh;
+  overflow-x:hidden;
+}
+/* scanlines CRT */
+body::after{
+  content:'';
+  position:fixed;
+  inset:0;
+  pointer-events:none;
+  z-index:99;
+  background:repeating-linear-gradient(0deg,transparent,transparent 2px,rgba(0,0,0,.08) 2px,rgba(0,0,0,.08) 4px);
+  opacity:.35;
+}
+svg{width:1.1em;height:1.1em;fill:currentColor;vertical-align:-.15em}
+a{color:inherit}
+.cut{clip-path:polygon(12px 0,100% 0,100% calc(100% - 12px),calc(100% - 12px) 100%,0 100%,0 12px)}
+
+/* ---------- HEADER ---------- */
+header{
+  position:sticky;
+  top:env(safe-area-inset-top,0px);
+  z-index:10;
+  display:flex;flex-wrap:wrap;gap:10px 18px;align-items:center;justify-content:space-between;
+  padding:14px 5vw;
+  background:linear-gradient(180deg,#0a0618f2,#0a0618e6);
+  backdrop-filter:blur(10px);
+  border-bottom:1px solid var(--line);
+  box-shadow:0 0 24px #7cf5e11a;
+}
+.logo{
+  font-family:var(--pixel);
+  font-size:13px;
+  letter-spacing:.06em;
+  text-decoration:none;
+  color:var(--a);
+  text-shadow:0 0 12px var(--a), 2px 2px 0 var(--b);
+}
+.logo i{color:var(--b);font-style:normal;text-shadow:0 0 10px var(--b)}
+nav{display:flex;gap:6px;flex-wrap:wrap}
+nav a,.btn{
+  display:inline-flex;gap:8px;align-items:center;
+  padding:8px 16px;
+  text-decoration:none;border:0;cursor:pointer;
+  font:700 14px inherit;font-family:inherit;
+  color:var(--ink);
+  background:var(--card);
+  clip-path:polygon(10px 0,100% 0,100% calc(100% - 10px),calc(100% - 10px) 100%,0 100%,0 10px);
+  transition:all .2s;
+}
+nav a:hover{background:var(--card2);color:var(--a)}
+nav a.on,.btn.p{
+  background:linear-gradient(120deg,var(--c),var(--b));
+  color:#15092f;
+  box-shadow:0 0 22px #9b8cff55, 0 0 8px #ff7ad966;
+}
+.btn.m{background:var(--a);color:#06241f;box-shadow:0 0 18px #7cf5e155}
+.soc{display:flex;gap:6px;align-items:center}
+.soc a,.soc button{
+  width:38px;height:38px;display:grid;place-items:center;border-radius:50%;
+  background:var(--card);color:var(--a);border:1px solid var(--line);
+  cursor:pointer;text-decoration:none;transition:all .2s;
+}
+.soc a:hover,.soc button:hover{color:var(--b);border-color:var(--b);box-shadow:0 0 16px #ff7ad966}
+
+/* ---------- BANDAS ---------- */
+.band{overflow:hidden;opacity:.55;margin:0;padding:8px 0;white-space:nowrap;-webkit-mask:linear-gradient(90deg,transparent,#000 15%,#000 85%,transparent)}
+.band div{display:inline-block;animation:mv 60s linear infinite}
+.band.r div{animation-direction:reverse}
+.band span{display:inline-block;margin:0 6px;padding:4px 14px;border-radius:4px 14px 4px 14px;font-size:13px;font-weight:700;color:#10062a}
+@keyframes mv{to{transform:translateX(-50%)}}
+@media(prefers-reduced-motion:reduce){.band div{animation:none}}
+
+/* ---------- MAIN ---------- */
+main{max-width:1040px;margin:0 auto;padding:30px 5vw 60px;position:relative;z-index:2}
+h1{
+  font-family:var(--pixel);
+  font-size:clamp(18px,4.5vw,34px);
+  line-height:1.35;
+  letter-spacing:.02em;
+  margin:.4em 0 .3em;
+  background:linear-gradient(90deg,var(--a),var(--c) 40%,var(--b));
+  -webkit-background-clip:text;background-clip:text;color:transparent;
+  filter:drop-shadow(0 0 22px #9b8cff66);
+}
+h2{
+  font-family:var(--pixel);
+  font-size:12px;
+  line-height:1.6;
+  margin:2em 0 .6em;
+  color:var(--a);
+  letter-spacing:.04em;
+  text-shadow:2px 2px 0 #ff7ad966, 0 0 16px #7cf5e188;
+}
+.mute{color:var(--mute)}
+.box{background:var(--card);border:1px solid var(--line);padding:22px}
+.ph{aspect-ratio:16/9;width:100%;border:0;background:#000;box-shadow:0 0 30px #9b8cff33}
+.row{display:flex;gap:10px;flex-wrap:wrap;margin:14px 0}
+.sup{display:grid;gap:18px;grid-template-columns:1fr auto;align-items:center}
+.cup{
+  width:120px;height:120px;display:grid;place-items:center;
+  border-radius:50% 50% 50% 8px;
+  background:linear-gradient(135deg,var(--b),var(--c));
+  color:#15092f;font-size:56px;
+  box-shadow:0 0 30px #ff7ad955;
+  animation:float 4s ease-in-out infinite;
+}
+@keyframes float{50%{transform:translateY(-6px)}}
+
+/* ---------- GRID PERSONAGENS ---------- */
+.grid{display:grid;gap:14px;grid-template-columns:repeat(auto-fill,minmax(170px,1fr))}
+.ch{
+  position:relative;
+  background:var(--card);
+  border:1px solid var(--line);
+  padding:12px;
+  display:flex;flex-direction:column;gap:8px;
+  transition:all .25s;
+}
+.ch:hover{
+  border-color:var(--a);
+  background:var(--card2);
+  box-shadow:0 0 22px #7cf5e133, 0 0 8px #ff7ad926;
+  transform:translateY(-2px);
+}
+.av{
+  aspect-ratio:1;display:grid;place-items:center;
+  font:800 40px Georgia,serif;color:#fff;
+  text-shadow:0 2px 8px #0008;
+  border-radius:6px 30px 6px 30px;
+  position:relative;overflow:hidden;
+  border:1px solid #7cf5e133;
+  box-shadow:inset 0 0 24px #0006, 0 0 14px #7cf5e122;
+}
+.av>img,.av>svg{width:100%;height:100%;object-fit:cover;display:block}
+.cam{position:absolute;right:6px;bottom:6px;display:flex;gap:4px}
+.cam label,.cam button{
+  background:#0a0618cc;color:var(--ink);border:1px solid var(--line);
+  border-radius:12px;padding:2px 8px;font-size:12px;font-weight:700;
+  font-family:inherit;cursor:pointer;
+}
+.cam button:hover{color:var(--b);border-color:var(--b)}
+.gi{position:absolute;right:0;top:0;height:100%;aspect-ratio:1}
+.gi img,.gi svg{width:100%;height:100%;object-fit:cover;display:block}
+.gal>b,.gal>small{position:relative}
+.ch b{line-height:1.2;font-size:14px}
+.ch small{color:var(--mute);font-size:12px}
+.vt{
+  margin-top:auto;display:flex;justify-content:space-between;align-items:center;
+  background:var(--bg);border:1px solid var(--line);color:var(--ink);
+  padding:6px 10px;cursor:pointer;border-radius:20px;font:inherit;
+  transition:all .2s;
+}
+.vt:hover{border-color:var(--b);color:var(--b)}
+.vt.on{background:var(--b);color:#2a0820;border-color:var(--b);box-shadow:0 0 16px #ff7ad966}
+
+/* ---------- INPUTS ---------- */
+input,textarea,select{
+  width:100%;padding:10px 12px;background:var(--bg);color:var(--ink);
+  border:1px solid var(--line);border-radius:6px;font:inherit;
+  outline:none;transition:border-color .2s;
+}
+input:focus,textarea:focus,select:focus{border-color:var(--a);box-shadow:0 0 12px #7cf5e133}
+textarea{min-height:120px;font:13px/1.4 'VT323',ui-monospace,Menlo,monospace;font-size:15px}
+.tools{display:grid;gap:10px;grid-template-columns:1fr 160px 110px}
+@media(max-width:620px){.tools,.sup{grid-template-columns:1fr}.cup{display:none}}
+
+/* ---------- FILA ---------- */
+.q{display:flex;gap:14px;align-items:center;padding:10px 14px;margin:8px 0}
+.q .n{font:800 24px 'Press Start 2P',monospace;color:var(--b);width:40px;text-shadow:0 0 12px var(--b)}
+.q.d{opacity:.45;text-decoration:line-through}
+.mix{display:block;text-decoration:none;padding:16px;background:var(--card);border-left:4px solid var(--a);transition:all .2s}
+.mix:hover{border-color:var(--b);box-shadow:0 0 20px #ff7ad933}
+
+/* ---------- FOOTER ---------- */
+footer{text-align:center;color:var(--mute);font-size:13px;padding:30px 5vw;position:relative;z-index:2}
+
+/* ---------- EDITOR ---------- */
+#ed{position:fixed;inset:0;z-index:20;background:#05020fdd;display:none;overflow:auto;padding:4vw;backdrop-filter:blur(6px)}
+#ed.open{display:block}
+#ed .box{max-width:720px;margin:auto;display:grid;gap:10px;border:1px solid var(--a);box-shadow:0 0 40px #7cf5e155}
+label{font-size:13px;color:var(--mute)}
+.hid{display:none}
+</style>
+</head>
+<body>
+<svg class="hid" xmlns="http://www.w3.org/2000/svg"><defs>
+<symbol id="yt" viewBox="0 0 24 24"><path d="M3 8a4 4 0 014-4h10a4 4 0 014 4v8a4 4 0 01-4 4H7a4 4 0 01-4-4zm7 1.5v5l4.5-2.5z"/></symbol>
+<symbol id="sp" viewBox="0 0 24 24"><path d="M12 2a10 10 0 100 20 10 10 0 000-20zm4.6 14.4a.8.8 0 01-1.1.3c-3-1.8-6.7-2.2-11.1-1.2a.8.8 0 11-.4-1.5c4.8-1.1 8.9-.6 12.3 1.4.4.2.5.7.3 1zm1.5-3.3a1 1 0 01-1.4.3c-3.4-2.1-8.6-2.7-12.6-1.5a1 1 0 11-.6-1.9c4.6-1.4 10.3-.7 14.2 1.7.5.3.6.9.4 1.4zm.1-3.4C14.2 7.3 7.6 7.1 3.8 8.3a1.2 1.2 0 11-.7-2.3c4.4-1.3 11.7-1.1 16.3 1.7a1.2 1.2 0 01-1.2 2z"/></symbol>
+<symbol id="kf" viewBox="0 0 24 24"><path d="M4 8h13v6a5 5 0 01-5 5H9a5 5 0 01-5-5zm13 1h1.5a2.5 2.5 0 010 5H17v-1.6h1.5a.9.9 0 000-1.8H17zM9 3h1.5v3H9zm3.5 0H14v3h-1.5z"/></symbol>
+<symbol id="ht" viewBox="0 0 24 24"><path d="M12 21l-1.5-1.3C5.4 15.1 2 12 2 8.5A4.5 4.5 0 016.5 4c1.7 0 3.4.8 4.5 2.1h2A5.8 5.8 0 0117.5 4 4.5 4.5 0 0122 8.5c0 3.5-3.4 6.6-8.5 11.2z"/></symbol>
+<symbol id="ed" viewBox="0 0 24 24"><path d="M4 17.5V20h2.5L18 8.5 15.5 6zM19.7 6.8a1 1 0 000-1.4l-1.1-1.1a1 1 0 00-1.4 0l-1 1 2.5 2.5z"/></symbol>
+</defs></svg>
+
+<header>
+  <a class="logo" href="#music">LUCID<i>◇</i>RIFT</a>
+  <nav id="nav"></nav>
+  <div class="soc" id="soc"></div>
+</header>
+<div class="band" id="b1"></div>
+<div class="band r" id="b2"></div>
+<main id="app"></main>
+<footer>every track feels like coming home · press start to remember<br>personagens pertencem aos seus respectivos donos. fan art sem fins comerciais.</footer>
+
+<div id="ed"><div class="box cut" id="edbox"></div></div>
+
+<script>
+const DEF={
+tag:"every track feels like coming home",
+sub:"press start to remember",
+yt:"https://www.youtube.com/@Lucidrift_mp3",
+sp:"https://open.spotify.com/intl-pt/artist/179xVKG79JkPZ4XsIO5AnN",
+kf:"https://ko-fi.com/lucidrift_mp3/shop",
+pl:"UUMxE5z7slvFH3a05GAwQSwg",
+mixes:"",
+chars:`Chun-Li|Street Fighter II|1991
+Samus Aran|Metroid|1991
+Usagi Tsukino|Sailor Moon|1992
+Cammy White|Street Fighter II|1993
+Mai Shiranui|Fatal Fury|1993
+Morrigan Aensland|Darkstalkers|1994
+Rei Ayanami|Evangelion|1995
+Asuka Langley|Evangelion|1995
+Misato Katsuragi|Evangelion|1995
+Motoko Kusanagi|Ghost in the Shell|1995
+Lara Croft|Tomb Raider|1996
+Jill Valentine|Resident Evil|1996
+Utena Tenjou|Revolutionary Girl Utena|1997
+Tifa Lockhart|Final Fantasy VII|1997
+Aerith Gainsborough|Final Fantasy VII|1997
+Sakura Kinomoto|Cardcaptor Sakura|1998
+Faye Valentine|Cowboy Bebop|1998
+Lain Iwakura|Serial Experiments Lain|1998
+Claire Redfield|Resident Evil|1998
+Ada Wong|Resident Evil 2|1998
+Princess Zelda|Ocarina of Time|1998
+Nami|One Piece|1999
+Sakura Haruno|Naruto|1999
+Kagome Higurashi|InuYasha|2000
+Chihiro|Spirited Away|2001
+Tohru Honda|Fruits Basket|2001
+Yuna|Final Fantasy X|2001
+Cortana|Halo|2001
+Nico Robin|One Piece|2002
+Hinata Hyuga|Naruto|2002
+Alyx Vance|Half-Life 2|2004
+Rukia Kuchiki|Bleach|2004
+Orihime Inoue|Bleach|2004
+Saber|Fate/stay night|2004
+Rin Tohsaka|Fate/stay night|2004
+Kallen Stadtfeld|Code Geass|2006
+C.C.|Code Geass|2006
+Haruhi Suzumiya|Haruhi Suzumiya|2006
+Revy|Black Lagoon|2006
+Yoko Littner|Gurren Lagann|2007
+Hatsune Miku|Vocaloid|2007
+Yennefer|The Witcher|2007
+Chell|Portal|2007
+Holo|Spice and Wolf|2008
+Taiga Aisaka|Toradora!|2008
+Faith|Mirror's Edge|2008
+Mio Akiyama|K-On!|2009
+Mikoto Misaka|Railgun|2009
+Bayonetta|Bayonetta|2009
+Erza Scarlet|Fairy Tail|2009
+Lightning|Final Fantasy XIII|2010
+Madoka Kaname|Madoka Magica|2011
+Homura Akemi|Madoka Magica|2011
+Ahri|League of Legends|2011
+Asuna Yuuki|Sword Art Online|2012
+Mikasa Ackerman|Attack on Titan|2013
+Ellie|The Last of Us|2013
+Ochaco Uraraka|My Hero Academia|2014
+Ciri|The Witcher 3|2015
+Max Caulfield|Life is Strange|2015
+Rem|Re:Zero|2016
+Emilia|Re:Zero|2016
+Megumin|KonoSuba|2016
+Aqua|KonoSuba|2016
+Tracer|Overwatch|2016
+Mercy|Overwatch|2016
+Makoto Niijima|Persona 5|2016
+Ann Takamaki|Persona 5|2016
+2B|NieR: Automata|2017
+Aloy|Horizon Zero Dawn|2017
+Zero Two|Darling in the Franxx|2018
+Violet Evergarden|Violet Evergarden|2018
+Mai Sakurajima|Rascal Does Not Dream|2018
+Nezuko Kamado|Demon Slayer|2019
+Shinobu Kocho|Demon Slayer|2019
+Kaguya Shinomiya|Kaguya-sama|2019
+Nino Nakano|Quintessential Quintuplets|2019
+Nobara Kugisaki|Jujutsu Kaisen|2020
+Hu Tao|Genshin Impact|2020
+Raiden Shogun|Genshin Impact|2020
+Jinx|Arcane|2021
+Vi|Arcane|2021
+Marin Kitagawa|My Dress-Up Darling|2022
+Makima|Chainsaw Man|2022
+Power|Chainsaw Man|2022
+Yor Forger|Spy x Family|2022
+Anya Forger|Spy x Family|2022
+Bocchi Gotoh|Bocchi the Rock!|2022
+Lucy|Cyberpunk: Edgerunners|2022
+Malenia|Elden Ring|2022
+Ai Hoshino|Oshi no Ko|2023
+Frieren|Sousou no Frieren|2023
+Furina|Genshin Impact|2023
+Kafka|Honkai: Star Rail|2023
+Shadowheart|Baldur's Gate 3|2023
+Karlach|Baldur's Gate 3|2023
+Maomao|The Apothecary Diaries|2023
+Momo Ayase|Dandadan|2024
+Firefly|Honkai: Star Rail|2024
+Ellen Joe|Zenless Zone Zero|2024
+Miyabi|Zenless Zone Zero|2024
+Eve|Stellar Blade|2024
+Melinoë|Hades II|2024
+Atsu|Ghost of Yotei|2025
+Grace|Resident Evil 9|2026
+Diana|PRAGMATA|2026`};
+
+let C={...DEF},S={votes:{},mine:{},done:{},custom:[],img:{}};
+try{Object.assign(C,JSON.parse(localStorage.getItem("lr_cfg")||"{}"))}catch(e){}
+try{Object.assign(S,JSON.parse(localStorage.getItem("lr_st")||"{}"))}catch(e){}
+const $=id=>document.getElementById(id);
+const esc=s=>String(s).replace(/[&<>"]/g,c=>({"&":"&amp;","<":"&lt;",">":"&gt;",'"':"&quot;"}[c]));
+const safeUrl=u=>/^https?:\/\//.test(u)?esc(u):"#";
+const saveC=()=>{try{localStorage.setItem("lr_cfg",JSON.stringify(C))}catch(e){}};
+const saveS=()=>{try{localStorage.setItem("lr_st",JSON.stringify(S))}catch(e){}};
+const hue=n=>{let h=0;for(const c of n)h=(h*31+c.charCodeAt(0))%360;return h};
+const grad=n=>`linear-gradient(135deg,hsl(${hue(n)} 85% 60%),hsl(${(hue(n)+70)%360} 85% 50%))`;
+const chars=()=>C.chars.split("\n").map(l=>l.split("|").map(s=>s.trim())).filter(a=>a[0]).concat(S.custom).map(a=>({n:a[0],s:a[1]||"—",y:+a[2]||""}));
+const ini=n=>n.split(" ").slice(0,2).map(w=>w[0]).join("").toUpperCase();
+
+/* avatar procedural — mais detalhado, estilo chibi neon */
+const art=n=>{
+  if(S.img&&S.img[n])return `<img src="${S.img[n]}" alt="${esc(n)}">`;
+  const h=hue(n),
+    P=["#2b2140","#f3d27a","#e86a92","#5aa7ff","#c9c9ff","#ff8a4c","#7de0b0","#a05cff","#f2f2f2"],
+    H=P[h%9], E=P[(h*7+3)%9], v=h%5;
+  const back=[
+    `<path d="M18 52C14 18 34 8 50 8s36 10 32 44c0 18 6 30 6 40H12c0-10 6-22 6-40z" fill="${H}"/>`,
+    `<path d="M20 40C20 14 80 14 80 40z" fill="${H}"/><ellipse cx="14" cy="60" rx="9" ry="26" fill="${H}"/><ellipse cx="86" cy="60" rx="9" ry="26" fill="${H}"/>`,
+    `<path d="M20 58C12 20 32 10 50 10s38 10 30 48c-6 4-54 4-60 0z" fill="${H}"/>`,
+    `<path d="M22 50C20 18 38 10 50 10s30 8 28 40z" fill="${H}"/><circle cx="50" cy="8" r="9" fill="${H}"/>`,
+    `<path d="M16 54C10 22 34 6 50 6s40 16 34 48c-4 4-64 4-68 0z" fill="${H}"/><circle cx="18" cy="24" r="6" fill="${H}"/><circle cx="82" cy="24" r="6" fill="${H}"/>`
+  ][v];
+  return `<svg viewBox="0 0 100 100" aria-hidden="true">
+    ${back}
+    <path d="M14 100c2-18 16-24 36-24s34 6 36 24z" fill="#3b2f7a"/>
+    <rect x="43" y="62" width="14" height="18" fill="#f6d2bf"/>
+    <ellipse cx="50" cy="46" rx="22" ry="25" fill="#ffe3d3"/>
+    <path d="M27 42C28 22 72 22 73 42 66 30 36 30 27 42z" fill="${H}"/>
+    <ellipse cx="41" cy="50" rx="3.5" ry="5.5" fill="${E}"/>
+    <ellipse cx="59" cy="50" rx="3.5" ry="5.5" fill="${E}"/>
+    <circle cx="42" cy="48" r="1.4" fill="#fff"/>
+    <circle cx="60" cy="48" r="1.4" fill="#fff"/>
+    <ellipse cx="34" cy="56" rx="4" ry="2" fill="#ff9ec4" opacity=".5"/>
+    <ellipse cx="66" cy="56" rx="4" ry="2" fill="#ff9ec4" opacity=".5"/>
+    <path d="M45 62q5 4 10 0" stroke="#c4576e" stroke-width="1.6" fill="none" stroke-linecap="round"/>
+  </svg>`;
+};
+
+const tabs=[["music","Music"],["suggest","Sugerir"],["queue","Fila"],["gallery","Galeria"]];
+
+function head(){
+  const v=(location.hash||"#music").slice(1);
+  $("nav").innerHTML=tabs.map(t=>`<a href="#${t[0]}" class="${v===t[0]?"on":""}">${t[1]}</a>`).join("");
+  $("soc").innerHTML=`<a href="${safeUrl(C.yt)}" target="_blank" rel="noopener" title="YouTube"><svg><use href="#yt"/></svg></a><a href="${safeUrl(C.sp)}" target="_blank" rel="noopener" title="Spotify"><svg><use href="#sp"/></svg></a><a href="${safeUrl(C.kf)}" target="_blank" rel="noopener" title="Ko-fi"><svg><use href="#kf"/></svg></a><button onclick="openEd()" title="Editar site"><svg><use href="#ed"/></svg></button>`;
+  const L=chars(),mk=()=>`<div>${[...L,...L].map(c=>`<span style="background:${grad(c.n)}">${esc(c.n)}</span>`).join("")}</div>`;
+  $("b1").innerHTML=mk();$("b2").innerHTML=mk();
+}
+
+function music(){
+  const mixes=C.mixes.split("\n").map(l=>l.split("|").map(s=>s.trim())).filter(a=>a[0]);
+  return `<h1>LUCIDRIFT</h1><p class="mute">${esc(C.tag)}<br>${esc(C.sub)}</p>
+  <h2>todas as mixes, mais novas primeiro</h2>
+  <iframe class="ph cut" src="https://www.youtube.com/embed/videoseries?list=${encodeURIComponent(C.pl)}" allowfullscreen loading="lazy" title="Mixes do Lucidrift"></iframe>
+  <div class="row"><a class="btn p" href="${safeUrl(C.yt)}" target="_blank" rel="noopener"><svg><use href="#yt"/></svg>Inscreva-se no YouTube</a><a class="btn" href="${safeUrl(C.sp)}" target="_blank" rel="noopener"><svg><use href="#sp"/></svg>Spotify</a></div>
+  <h2>gostando das mixes?</h2>
+  <div class="box cut sup"><div><p>um café é sempre bem-vindo, nunca obrigatório.<br>toda mix aqui é gratuita, com ou sem café. se uma delas te fez companhia, essa é uma forma bonita de agradecer.</p><a class="btn m" href="${safeUrl(C.kf)}" target="_blank" rel="noopener"><svg><use href="#kf"/></svg>Apoiar no Ko-fi</a></div><div class="cup"><svg style="width:56px;height:56px"><use href="#kf"/></svg></div></div>
+  <h2>últimas mixes</h2>
+  <div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(280px,1fr))">${mixes.length?mixes.map(m=>`<a class="mix cut" href="${safeUrl(m[1]||C.yt)}" target="_blank" rel="noopener">▶ ${esc(m[0])}</a>`).join(""):`<a class="mix cut" href="${safeUrl(C.yt)}" target="_blank" rel="noopener">▶ Veja todas as mixes no canal<br><small class="mute">use o botão ✎ para adicionar títulos e links das mixes aqui</small></a>`}</div>`;
+}
+
+let q="",dec="",srt="y";
+function suggest(){
+  return `<h1>Sugerir</h1><p class="mute">vote nas personagens que você quer ouvir em uma próxima mix. sua sugestão não está na lista? adicione.</p>
+  <div class="tools"><input id="q" placeholder="buscar personagem ou série" value="${esc(q)}" oninput="q=this.value;list()"><select onchange="dec=this.value;list()"><option value="">todas as épocas</option>${["1990","2000","2010","2020"].map(d=>`<option value="${d}" ${dec===d?"selected":""}>anos ${d.slice(2)}${d==="2020"?" (2020–26)":"s"}</option>`).join("")}</select><select onchange="srt=this.value;list()"><option value="y">por ano</option><option value="v" ${srt==="v"?"selected":""}>mais votadas</option><option value="a" ${srt==="a"?"selected":""}>A–Z</option></select></div>
+  <div class="row"><input id="nn" placeholder="nome" style="flex:1;min-width:140px"><input id="ns" placeholder="anime ou jogo" style="flex:1;min-width:140px"><button class="btn p" onclick="addC()">Adicionar sugestão</button></div>
+  <div class="grid" id="g"></div>`;
+}
+
+function list(){
+  let L=chars().filter(c=>(c.n+c.s).toLowerCase().includes(q.toLowerCase())&&(!dec||(c.y>=dec&&c.y<+dec+10)));
+  L.sort(srt==="v"?(a,b)=>(S.votes[b.n]||0)-(S.votes[a.n]||0):srt==="a"?(a,b)=>a.n.localeCompare(b.n):(a,b)=>(a.y||9999)-(b.y||9999));
+  $("g").innerHTML=L.map(c=>`<div class="ch cut"><div class="av" style="background:${grad(c.n)}">${art(c.n)}<span class="cam"><label title="enviar imagem">foto<input type="file" accept="image/*" data-up="${esc(c.n)}" class="hid"></label>${S.img[c.n]?`<button data-rm="${esc(c.n)}" title="remover imagem">×</button>`:""}</span></div><b>${esc(c.n)}</b><small>${esc(c.s)}${c.y?" · "+c.y:""}</small><button class="vt ${S.mine[c.n]?"on":""}" data-n="${esc(c.n)}"><span><svg><use href="#ht"/></svg> votar</span><b>${S.votes[c.n]||0}</b></button></div>`).join("")||`<p class="mute">nada encontrado.</p>`;
+  document.querySelectorAll(".vt").forEach(b=>b.onclick=()=>{const n=b.dataset.n;if(S.mine[n]){S.mine[n]=0;S.votes[n]=Math.max(0,(S.votes[n]||1)-1)}else{S.mine[n]=1;S.votes[n]=(S.votes[n]||0)+1}saveS();list()});
+  document.querySelectorAll("[data-up]").forEach(i=>i.onchange=()=>{const f=i.files[0];if(!f)return;const r=new FileReader();r.onload=()=>{const im=new Image();im.onload=()=>{const c=document.createElement("canvas"),s=Math.min(im.width,im.height);c.width=c.height=240;c.getContext("2d").drawImage(im,(im.width-s)/2,(im.height-s)/2,s,s,0,0,240,240);S.img[i.dataset.up]=c.toDataURL("image/jpeg",.8);saveS();list()};im.src=r.result};r.readAsDataURL(f)});
+  document.querySelectorAll("[data-rm]").forEach(b=>b.onclick=()=>{delete S.img[b.dataset.rm];saveS();list()});
+}
+
+function addC(){const n=$("nn").value.trim(),s=$("ns").value.trim();if(!n)return;S.custom.push([n,s,""]);S.mine[n]=1;S.votes[n]=1;saveS();$("nn").value=$("ns").value="";head();list()}
+
+function queue(){
+  const L=chars().filter(c=>S.votes[c.n]>0).sort((a,b)=>S.votes[b.n]-S.votes[a.n]);
+  return `<h1>Fila</h1><p class="mute">as personagens mais votadas neste navegador. marque como feita quando a mix sair.</p>`+(L.length?L.map((c,i)=>`<div class="q box cut ${S.done[c.n]?"d":""}"><span class="n">${String(i+1).padStart(2,'0')}</span><div class="av" style="width:48px;background:${grad(c.n)}">${art(c.n)}</div><div style="flex:1"><b>${esc(c.n)}</b><br><small class="mute">${esc(c.s)}</small></div><b>♥ ${S.votes[c.n]}</b><button class="btn" data-d="${esc(c.n)}">${S.done[c.n]?"desfazer":"feita"}</button></div>`).join(""):`<div class="box cut">a fila está vazia. vá em <a href="#suggest">Sugerir</a> e vote.</div>`);
+}
+
+function gallery(){
+  return `<h1>Galeria</h1><p class="mute">capas em estilo lucid drift das personagens da lista.</p><div class="grid" style="grid-template-columns:repeat(auto-fill,minmax(220px,1fr))">${chars().map(c=>`<div class="cut gal" style="aspect-ratio:16/9;background:${grad(c.n)};padding:14px;display:flex;flex-direction:column;justify-content:flex-end;color:#fff;text-shadow:0 2px 8px #0009;position:relative;overflow:hidden"><span class="gi">${art(c.n)}</span><b style="font-family:'Press Start 2P',monospace;font-size:11px;line-height:1.5">${esc(c.n)}</b><small>${esc(c.s)}</small></div>`).join("")}</div>`;
+}
+
+function draw(){
+  const v=(location.hash||"#music").slice(1);
+  $("app").innerHTML=({suggest,queue,gallery}[v]||music)();
+  head();
+  if(v==="suggest")list();
+  document.querySelectorAll("[data-d]").forEach(b=>b.onclick=()=>{S.done[b.dataset.d]=!S.done[b.dataset.d];saveS();draw()});
+  window.scrollTo(0,0);
+}
+
+function openEd(){
+  const f=(k,l)=>`<label>${l}<input data-k="${k}" value="${esc(C[k])}"></label>`;
+  const t=(k,l,h)=>`<label>${l}<textarea data-k="${k}" ${h?`style="min-height:${h}px"`:''}>${esc(C[k])}</textarea></label>`;
+  $("edbox").innerHTML=`<h2 style="margin:0">⚙ Editar site</h2><p class="mute" style="margin:0">as alterações ficam salvas neste navegador. use Exportar para guardar um backup e Importar para restaurar.</p>
+  ${f("tag","frase principal")}${f("sub","subfrase")}${f("yt","link do YouTube")}${f("sp","link do Spotify")}${f("kf","link do Ko-fi")}${f("pl","ID da playlist de uploads do YouTube")}
+  ${t("mixes","últimas mixes (uma por linha: Título | link)")}${t("chars","personagens (uma por linha: Nome | Série | Ano)",300)}
+  <div class="row"><button class="btn p" onclick="saveEd()">Salvar</button><button class="btn" onclick="exp()">Exportar</button><button class="btn" onclick="$('imp').click()">Importar</button><button class="btn" onclick="rst()">Restaurar padrão</button><button class="btn" onclick="$('ed').classList.remove('open')">Fechar</button></div><input type="file" id="imp" accept=".json" class="hid">`;
+  $("imp").onchange=e=>{const r=new FileReader();r.onload=()=>{try{const o=JSON.parse(r.result);C={...DEF,...(o.cfg||{})};S={...S,...(o.state||{})};saveC();saveS();$("ed").classList.remove("open");draw()}catch(x){alert("arquivo inválido")}};r.readAsText(e.target.files[0])};
+  $("ed").classList.add("open");
+}
+function saveEd(){document.querySelectorAll("#edbox [data-k]").forEach(i=>C[i.dataset.k]=i.value);saveC();$("ed").classList.remove("open");draw()}
+function exp(){const a=document.createElement("a");a.href=URL.createObjectURL(new Blob([JSON.stringify({cfg:C,state:S},null,1)],{type:"application/json"}));a.download="lucidrift-backup.json";a.click()}
+function rst(){if(confirm("Restaurar todo o conteúdo padrão?")){C={...DEF};saveC();$("ed").classList.remove("open");draw()}}
+
+addEventListener("hashchange",draw);draw();
+</script>
+</body>
+</html>
